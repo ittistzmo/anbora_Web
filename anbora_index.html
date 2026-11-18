@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#123F46" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="ANBORA — Personal safety check-in and AI companion application. A Little Care. A Stronger Connection." />
+  <title>ANBORA — A Little Care. A Stronger Connection.</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./favicon.ico" sizes="any" />
+  <link rel="icon" href="./assets/icons/logo.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/animations.css" />
+  <link rel="stylesheet" href="./css/responsive.css" />
+</head>
+<body>
+  <!-- 1. SPLASH SCREEN -->
+  <div id="screen-splash" class="splash-screen" role="status" aria-label="Loading ANBORA">
+    <img src="./assets/icons/logo.svg" alt="ANBORA Logo" class="splash-logo" />
+    <div class="splash-title">ANBORA</div>
+    <div class="splash-tagline" data-i18n="tagline">A Little Care. A Stronger Connection.</div>
+    <div class="badge badge-safe">Initializing Secure Care Shield...</div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <div class="app-shell">
+    <!-- TOP HEADER -->
+    <header id="app-header" class="app-header hidden">
+      <div class="header-brand" data-route="/dashboard">
+        <img src="./assets/icons/logo.svg" alt="ANBORA" />
+        <div>
+          <div class="header-brand-title">ANBORA</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-install-pwa" class="btn btn-sm btn-coral hidden" type="button" data-i18n="install_app">Install App</button>
+        <button class="btn btn-sm btn-outline" type="button" data-route="/profile" aria-label="Profile & Settings">
+          <span id="header-user-badge">Account</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-viewport">
+      <!-- 2. WELCOME / ONBOARDING -->
+      <section id="screen-welcome" class="screen" data-screen="/welcome">
+        <div class="card card-hero" style="text-align:center; padding: 28px 20px;">
+          <img src="./assets/images/splash-illustration.svg" alt="ANBORA Safety Illustration" style="width:100%; max-width:290px; border-radius:16px; margin-bottom:16px;" />
+          <h1 style="color:#FFF5E9; font-size:1.75rem;" data-i18n="welcome_title">A Little Care. A Stronger Connection.</h1>
+          <p style="color:#A8D8C8; font-size:0.95rem;" data-i18n="welcome_subtitle">
+            Automated hourly safety check-ins, 24-hour cloud emergency escalation, and a warm AI companion in English, Tamil &amp; Tanglish.
+          </p>
+          <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+            <button class="btn btn-coral" type="button" data-route="/register" data-i18n="get_started">Create Account</button>
+            <button class="btn btn-outline" style="color:#FFF5E9; border-color:rgba(255,245,233,0.4);" type="button" data-route="/login" data-i18n="sign_in">Sign In</button>
+          </div>
+        </div>
+
+        <div class="grid-2-desktop">
+          <div class="card">
+            <h3>Smart Category Check-ins</h3>
+            <p style="font-size:0.9rem; margin:0;">Flexible optional check-ins at <strong>WORK</strong> &amp; <strong>TEMPLE</strong>, and mandatory safety confirmations at <strong>HOUSE</strong> &amp; <strong>OTHER</strong>.</p>
+          </div>
+          <div class="card">
+            <h3>24h Server-Side Escalation</h3>
+            <p style="font-size:0.9rem; margin:0;">Cloud Functions keep watching even when your browser is closed—alerting trusted contacts if a 24-hour window passes unconfirmed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. REGISTRATION -->
+      <section id="screen-register" class="screen" data-screen="/register">
+        <div class="card">
+          <h2 data-i18n="register_title">Create Your ANBORA Account</h2>
+          <p style="font-size:0.9rem;">Set up your personal safety profile and cloud monitoring shield.</p>
+          <form id="form-register" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Full Name</label>
+              <input class="form-control" id="reg-name" type="text" required placeholder="e.g., Ananya Krishnan" />
+              <span class="form-error" id="err-reg-name"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Email Address</label>
+              <input class="form-control" id="reg-email" type="email" required placeholder="you@example.com" />
+              <span class="form-error" id="err-reg-email"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">Mobile Number (with Country Code)</label>
+              <input class="form-control" id="reg-phone" type="tel" required placeholder="+91 98765 43210" />
+              <span class="form-error" id="err-reg-phone"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-lang">Preferred Language</label>
+              <select class="form-control" id="reg-lang">
+                <option value="en">English</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="tanglish">Tanglish</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Password (min 8 characters)</label>
+              <input class="form-control" id="reg-password" type="password" required minlength="8" placeholder="••••••••" />
+              <span class="form-error" id="err-reg-password"></span>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Create Account &amp; Initialize Shield</button>
+          </form>
+          <p style="text-align:center; margin-top:16px; font-size:0.9rem;">
+            Already have an account? <a href="#/login" data-route="/login">Sign In</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- 4. LOGIN -->
+      <section id="screen-login" class="screen" data-screen="/login">
+        <div class="card">
+          <h2 data-i18n="login_title">Welcome Back to ANBORA</h2>
+          <p style="font-size:0.9rem;">Sign in to confirm your safety status or talk with your AI companion.</p>
+          <form id="form-login" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email Address</label>
+              <input class="form-control" id="login-email" type="email" required placeholder="you@example.com" />
+              <span class="form-error" id="err-login-email"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password</label>
+              <input class="form-control" id="login-password" type="password" required placeholder="••••••••" />
+              <span class="form-error" id="err-login-password"></span>
+            </div>
+            <div style="text-align:right; margin-bottom:16px;">
+              <a href="#/forgot-password" data-route="/forgot-password" style="font-size:0.85rem;">Forgot Password?</a>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Sign In</button>
+          </form>
+          <p style="text-align:center; margin-top:16px; font-size:0.9rem;">
+            New to ANBORA? <a href="#/register" data-route="/register">Create an Account</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- 5. FORGOT PASSWORD -->
+      <section id="screen-forgot" class="screen" data-screen="/forgot-password">
+        <div class="card">
+          <h2>Reset Password</h2>
+          <p style="font-size:0.9rem;">Enter your registered email address and Firebase Authentication will send you a password reset link.</p>
+          <form id="form-forgot" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="forgot-email">Registered Email</label>
+              <input class="form-control" id="forgot-email" type="email" required placeholder="you@example.com" />
+              <span class="form-error" id="err-forgot-email"></span>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Send Reset Link</button>
+          </form>
+          <p style="text-align:center; margin-top:16px; font-size:0.9rem;">
+            <a href="#/login" data-route="/login">Back to Sign In</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- 6. DASHBOARD -->
+      <section id="screen-dashboard" class="screen" data-screen="/dashboard">
+        <div class="card card-hero">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+            <div>
+              <span id="dash-status-pill" class="badge badge-safe">Shield Active</span>
+              <h2 id="dash-greeting" style="margin-top:10px; font-size:1.45rem;">Hello, Friend</h2>
+              <p id="dash-last-checkin" style="font-size:0.88rem; opacity:0.9; margin-bottom:0;">Last confirmed check-in: Checking...</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; color:#A8D8C8;">24h Escalation Timer</div>
+              <div id="dash-countdown" style="font-family:var(--font-display); font-size:1.35rem; font-weight:800; color:#FFF5E9;">23h 59m</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;">
+            <button id="btn-quick-safe" class="btn btn-coral" type="button" data-i18n="im_safe_now">I'm Safe Now</button>
+            <button class="btn btn-outline" style="color:#FFF5E9; border-color:rgba(255,245,233,0.45);" type="button" data-route="/checkin">Choose Category</button>
+          </div>
+        </div>
+
+        <div id="dash-reminder-banner" class="card card-coral hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+            <div>
+              <strong style="color:#9E341B;">10-Minute Safety Reminder</strong>
+              <p style="font-size:0.86rem; margin:4px 0 0;">Mandatory safety confirmation is due for your current location category.</p>
+            </div>
+            <button id="btn-banner-confirm" class="btn btn-sm btn-danger" type="button">Confirm</button>
+          </div>
+        </div>
+
+        <div class="grid-2-desktop">
+          <div class="card">
+            <h3>Active Category</h3>
+            <p id="dash-category-label" style="font-weight:700; color:var(--teal); font-size:1.05rem; margin-bottom:4px;">HOUSE (Mandatory)</p>
+            <p id="dash-category-rule" style="font-size:0.84rem; margin:0;">Requires hourly confirmation with 10-min reminders.</p>
+          </div>
+          <div class="card">
+            <h3>Trusted Contacts</h3>
+            <p id="dash-contacts-count" style="font-weight:700; color:var(--deep-teal); font-size:1.05rem; margin-bottom:4px;">0 Contacts Configured</p>
+            <a href="#/contacts" data-route="/contacts" style="font-size:0.85rem;">Manage Emergency Circle &rarr;</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0;">Quick Actions</h3>
+          </div>
+          <div class="grid-2-desktop">
+            <button class="menu-item" type="button" data-route="/companion">
+              <span>Talk to ANBORA AI Companion</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="menu-item" type="button" data-route="/history">
+              <span>View Check-in History</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="menu-item" type="button" data-route="/location">
+              <span>Location Sharing &amp; GPS</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="menu-item" type="button" data-route="/sos">
+              <span style="color:#C93B1E;">Emergency SOS Panel</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. SAFETY CHECK-IN -->
+      <section id="screen-checkin" class="screen" data-screen="/checkin">
+        <div class="card">
+          <h2>Hourly Safety Check-in</h2>
+          <p style="font-size:0.9rem;">Select your current context. <strong>WORK</strong> and <strong>TEMPLE</strong> treat hourly check-ins as optional, while <strong>HOUSE</strong> and <strong>OTHER</strong> require active confirmation.</p>
+
+          <div class="category-grid" id="checkin-category-grid">
+            <button type="button" class="category-tile" data-cat="WORK">
+              <span class="category-tile-title">WORK</span>
+              <span class="category-tile-meta">Optional hourly check-in</span>
+            </button>
+            <button type="button" class="category-tile" data-cat="TEMPLE">
+              <span class="category-tile-title">TEMPLE</span>
+              <span class="category-tile-meta">Optional hourly check-in</span>
+            </button>
+            <button type="button" class="category-tile selected" data-cat="HOUSE">
+              <span class="category-tile-title">HOUSE</span>
+              <span class="category-tile-meta">Mandatory safety confirmation</span>
+            </button>
+            <button type="button" class="category-tile" data-cat="OTHER">
+              <span class="category-tile-title">OTHER</span>
+              <span class="category-tile-meta">Mandatory safety confirmation</span>
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="checkin-note">Optional Note (e.g., "Reached home safely")</label>
+            <input class="form-control" id="checkin-note" type="text" maxlength="140" placeholder="Add a short status note..." />
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; justify-content:space-between; background:var(--surface-alt); padding:12px; border-radius:12px;">
+            <div>
+              <strong style="font-size:0.88rem; color:var(--deep-teal);">Attach Current GPS Location</strong>
+              <div id="checkin-gps-preview" style="font-size:0.78rem; color:rgba(38,52,58,0.75);">Optional — uses browser Geolocation API</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="checkin-attach-gps" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <button id="btn-submit-checkin" class="btn btn-primary btn-block" type="button">Confirm Safety Check-in</button>
+          <p id="checkin-server-feedback" style="font-size:0.84rem; color:var(--teal); margin-top:12px; text-align:center;"></p>
+        </div>
+
+        <div class="card card-mint">
+          <h3 style="font-size:1rem;">How Cloud Monitoring Protects You</h3>
+          <ul style="margin:0; padding-left:18px; font-size:0.86rem;">
+            <li>Submitting a valid check-in records a server timestamp via <code>recordCheckin</code> and resets your 24-hour escalation clock.</li>
+            <li>If a mandatory check-in is missed, 10-minute reminder notifications alert you before escalation.</li>
+            <li>If 24 hours pass without confirmation, Firebase Cloud Functions (<code>tick</code> &rarr; <code>onAlertCreated</code>) notify your emergency contacts even if your phone or browser is closed.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8. CHECK-IN HISTORY -->
+      <section id="screen-history" class="screen" data-screen="/history">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h2 style="margin:0;">Check-in History</h2>
+            <button id="btn-refresh-history" class="btn btn-sm btn-outline" type="button">Refresh</button>
+          </div>
+          <p style="font-size:0.88rem;">Verified check-in logs synced with Cloud Firestore.</p>
+          <div id="history-list"></div>
+        </div>
+      </section>
+
+      <!-- 9. EMERGENCY CONTACTS -->
+      <section id="screen-contacts" class="screen" data-screen="/contacts">
+        <div class="card">
+          <h2>Emergency Contacts</h2>
+          <p style="font-size:0.88rem;">Trusted family or friends alerted automatically by <code>onAlertCreated</code> if you trigger SOS or miss a 24-hour check-in.</p>
+          <form id="form-add-contact" novalidate>
+            <div class="grid-2-desktop">
+              <div class="form-group">
+                <label class="form-label" for="contact-name">Contact Name</label>
+                <input class="form-control" id="contact-name" type="text" required placeholder="e.g., Amma / Karthik" />
+                <span class="form-error" id="err-contact-name"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-relation">Relationship</label>
+                <input class="form-control" id="contact-relation" type="text" required placeholder="Mother / Partner / Friend" />
+                <span class="form-error" id="err-contact-relation"></span>
+              </div>
+            </div>
+            <div class="grid-2-desktop">
+              <div class="form-group">
+                <label class="form-label" for="contact-phone">WhatsApp / Phone Number</label>
+                <input class="form-control" id="contact-phone" type="tel" required placeholder="+91 98765 43210" />
+                <span class="form-error" id="err-contact-phone"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-email">Email (Optional)</label>
+                <input class="form-control" id="contact-email" type="email" placeholder="contact@example.com" />
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Add Trusted Contact</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Your Emergency Circle</h3>
+          <div id="contacts-list"></div>
+        </div>
+      </section>
+
+      <!-- 10. LOCATION SHARING -->
+      <section id="screen-location" class="screen" data-screen="/location">
+        <div class="card">
+          <h2>Location Sharing</h2>
+          <p style="font-size:0.9rem;">Share your current coordinates during a check-in or emergency SOS using the browser Geolocation API.</p>
+
+          <div class="card card-mint" style="margin-bottom:16px;">
+            <div style="font-size:0.82rem; font-weight:700; color:var(--deep-teal);">CURRENT GPS STATUS</div>
+            <div id="location-coords" style="font-size:1.05rem; font-weight:700; margin:6px 0;">Location not captured yet</div>
+            <div id="location-meta" style="font-size:0.82rem;">Explicit browser permission required.</div>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="btn-capture-location" class="btn btn-primary" type="button">Capture Current Location</button>
+            <button id="btn-copy-maps-link" class="btn btn-outline" type="button" disabled>Copy Maps Link</button>
+          </div>
+        </div>
+
+        <div class="card card-coral">
+          <h3 style="font-size:1rem;">Important Browser PWA Reality &amp; Cloud Protection</h3>
+          <p style="font-size:0.86rem; margin-bottom:8px;">
+            <strong>No PWA can guarantee 24/7 continuous background GPS tracking</strong> when the browser is closed or the phone screen is locked, due to Android Chrome and iOS Safari OS battery &amp; privacy policies.
+          </p>
+          <p style="font-size:0.86rem; margin:0;">
+            Instead, ANBORA captures your explicit location whenever you check in or trigger SOS, and relies on <strong>Firebase Cloud Functions</strong> on Google's servers to monitor your 24-hour safety timer independently of your device.
+          </p>
+        </div>
+      </section>
+
+      <!-- 11. SOS -->
+      <section id="screen-sos" class="screen" data-screen="/sos">
+        <div class="card" style="text-align:center;">
+          <span class="badge badge-warning">IMMEDIATE ESCALATION</span>
+          <h2 style="margin-top:10px;">Emergency SOS</h2>
+          <p style="font-size:0.9rem;">Pressing SOS immediately creates a high-priority alert in Firestore, triggering <code>onAlertCreated</code> to notify your emergency contacts with your latest coordinates.</p>
+
+          <div class="sos-ring-wrap">
+            <button id="btn-trigger-sos" class="sos-trigger-btn pulse-sos" type="button">
+              <span>SOS</span>
+              <span style="font-size:0.72rem; font-weight:600; letter-spacing:0.04em;">TAP TO ALERT</span>
+            </button>
+          </div>
+
+          <div id="sos-active-box" class="card card-coral hidden" style="text-align:left;">
+            <strong style="color:#9E341B;">ACTIVE SOS ALERT DISPATCHED</strong>
+            <p id="sos-alert-details" style="font-size:0.86rem; margin:6px 0 12px;">Your emergency contacts are being notified via Cloud Functions.</p>
+            <button id="btn-resolve-sos" class="btn btn-primary btn-block" type="button">I Am Safe — Cancel &amp; Stop Escalation</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. AI COMPANION -->
+      <section id="screen-companion" class="screen" data-screen="/companion">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <div>
+              <h2 style="margin:0;">ANBORA AI Companion</h2>
+              <span style="font-size:0.82rem; color:rgba(38,52,58,0.75);">Warm emotional support &amp; safety guidance</span>
+            </div>
+            <span id="ai-connection-badge" class="badge badge-pending">AI Connection: Checking...</span>
+          </div>
+
+          <div id="ai-chat-box" class="chat-box" aria-live="polite"></div>
+
+          <form id="form-ai-chat" class="chat-input-row">
+            <input class="form-control" id="ai-chat-input" type="text" placeholder="Type in English, தமிழ், or Tanglish..." required />
+            <button class="btn btn-primary" type="submit">Send</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 13. USER PROFILE -->
+      <section id="screen-profile" class="screen" data-screen="/profile">
+        <div class="card">
+          <h2>User Profile</h2>
+          <form id="form-profile">
+            <div class="form-group">
+              <label class="form-label" for="prof-name">Display Name</label>
+              <input class="form-control" id="prof-name" type="text" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-email">Email</label>
+              <input class="form-control" id="prof-email" type="email" disabled />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-phone">Mobile Number</label>
+              <input class="form-control" id="prof-phone" type="tel" />
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Save Profile Changes</button>
+          </form>
+        </div>
+
+        <div class="menu-list">
+          <button class="menu-item" type="button" data-route="/notifications">
+            <span>Notification Settings</span>
+            <span>&rarr;</span>
+          </button>
+          <button class="menu-item" type="button" data-route="/language">
+            <span>Language Settings (English / தமிழ் / Tanglish)</span>
+            <span>&rarr;</span>
+          </button>
+          <button class="menu-item" type="button" data-route="/privacy">
+            <span>Privacy &amp; Security</span>
+            <span>&rarr;</span>
+          </button>
+          <button class="menu-item" type="button" data-route="/help">
+            <span>Help, PWA Install Guide &amp; About</span>
+            <span>&rarr;</span>
+          </button>
+          <button id="btn-logout" class="btn btn-outline btn-block" style="margin-top:8px; color:#C93B1E; border-color:rgba(201,59,30,0.35);" type="button">Sign Out</button>
+        </div>
+      </section>
+
+      <!-- 14. NOTIFICATION SETTINGS -->
+      <section id="screen-notifications" class="screen" data-screen="/notifications">
+        <div class="card">
+          <h2>Notification Settings</h2>
+          <p style="font-size:0.9rem;">Configure Web Push notifications and 10-minute missing check-in reminders.</p>
+
+          <div class="form-group" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border);">
+            <div>
+              <strong>Browser Push Permission</strong>
+              <div id="notif-perm-status" style="font-size:0.82rem; color:rgba(38,52,58,0.75);">Status: Checking...</div>
+            </div>
+            <button id="btn-request-notif" class="btn btn-sm btn-primary" type="button">Enable Push</button>
+          </div>
+
+          <div class="form-group" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border);">
+            <div>
+              <strong>10-Minute Missing Check-in Reminders</strong>
+              <div style="font-size:0.82rem;">Alerts you when HOUSE/OTHER check-in is overdue</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-10m-reminder" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0;">
+            <div>
+              <strong>Test Local Reminder Notification</strong>
+              <div style="font-size:0.82rem;">Verify sound &amp; banner on your Android device</div>
+            </div>
+            <button id="btn-test-notif" class="btn btn-sm btn-outline" type="button">Send Test</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. LANGUAGE SETTINGS -->
+      <section id="screen-language" class="screen" data-screen="/language">
+        <div class="card">
+          <h2>Language Settings</h2>
+          <p style="font-size:0.9rem;">Choose your preferred interface and AI Companion language.</p>
+          <div class="menu-list" id="language-options">
+            <button type="button" class="menu-item" data-lang-choice="en">
+              <span>English</span>
+              <span class="badge badge-safe">EN</span>
+            </button>
+            <button type="button" class="menu-item" data-lang-choice="ta">
+              <span>தமிழ் (Tamil)</span>
+              <span class="badge badge-safe">TA</span>
+            </button>
+            <button type="button" class="menu-item" data-lang-choice="tanglish">
+              <span>Tanglish (Tamil in English Script)</span>
+              <span class="badge badge-safe">TN-EN</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 16. PRIVACY & SECURITY -->
+      <section id="screen-privacy" class="screen" data-screen="/privacy">
+        <div class="card">
+          <h2>Privacy &amp; Security</h2>
+          <p style="font-size:0.9rem;">ANBORA is engineered with strict privacy-first principles:</p>
+          <ul style="padding-left:18px; font-size:0.88rem; line-height:1.65;">
+            <li><strong>Zero Secret Keys in Frontend:</strong> All AI API keys, WhatsApp webhook secrets, and service accounts stay exclusively inside Firebase Cloud Functions Secret Manager.</li>
+            <li><strong>User-Scoped Firestore Rules:</strong> Only your authenticated UID can read or modify your profile, check-in records, and emergency contacts.</li>
+            <li><strong>Explicit Location Consent:</strong> GPS coordinates are accessed only when you explicitly grant browser permission and submit a check-in or SOS.</li>
+            <li><strong>Duplicate Alert Prevention:</strong> Idempotency keys in Firestore ensure emergency contacts are never spammed by duplicate alerts.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 17. HELP & ABOUT -->
+      <section id="screen-help" class="screen" data-screen="/help">
+        <div class="card">
+          <h2>Help, PWA Installation &amp; About</h2>
+          <p><strong>ANBORA v1.0.0</strong> — <em>A Little Care. A Stronger Connection.</em></p>
+          <h3>Install on Android Chrome (No APK Needed)</h3>
+          <ol style="padding-left:18px; font-size:0.88rem; line-height:1.65;">
+            <li>Open ANBORA over <strong>HTTPS</strong> in Google Chrome on Android.</li>
+            <li>Tap the <strong>Install App</strong> button in the ANBORA header, or tap Chrome's <strong>&#8942; Menu &rarr; Add to Home screen / Install app</strong>.</li>
+            <li>Confirm installation. ANBORA launches in full-screen standalone mode from your home screen.</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Primary Navigation">
+      <button class="nav-item active" type="button" data-route="/dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" type="button" data-route="/checkin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Check-in</span>
+      </button>
+      <button class="nav-item sos-nav" type="button" data-route="/sos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>SOS</span>
+      </button>
+      <button class="nav-item" type="button" data-route="/companion">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>AI Care</span>
+      </button>
+      <button class="nav-item" type="button" data-route="/contacts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Circle</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Optional Environment Config -->
+  <script src="./config/environment.example.js"></script>
+
+  <!-- ANBORA Vanilla ES6 Modules -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

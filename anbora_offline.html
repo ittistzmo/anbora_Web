@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#123F46" />
+  <title>ANBORA — Offline Mode</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #FFF5E9;
+      color: #26343A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 32px 24px;
+      max-width: 400px;
+      box-shadow: 0 12px 32px rgba(18, 63, 70, 0.12);
+      border: 1px solid rgba(20, 125, 120, 0.18);
+    }
+    .badge {
+      display: inline-block;
+      background: #123F46;
+      color: #A8D8C8;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 { color: #123F46; margin: 0 0 12px; font-size: 24px; }
+    p { line-height: 1.6; font-size: 15px; margin: 0 0 24px; color: #26343A; }
+    .note {
+      background: #FFF5E9;
+      border-left: 4px solid #F28B72;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    button {
+      background: #147D78;
+      color: #FFFFFF;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">ANBORA OFFLINE</div>
+    <h1>You are currently offline</h1>
+    <p>ANBORA requires an active internet connection to sync safety check-ins and dispatch emergency alerts to Firebase Cloud Functions.</p>
+    <div class="note">
+      <strong>Server Protection Active:</strong> Your last confirmed check-in remains saved on ANBORA's cloud servers. If your 24-hour escalation window expires while offline, backend Cloud Functions will still notify your emergency contacts automatically.
+    </div>
+    <button onclick="window.location.href='./index.html'">Retry Connection</button>
+  </div>
+</body>
+</html>

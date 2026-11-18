@@ -1,0 +1,39 @@
+@media (min-width: 768px) {
+  .main-viewport {
+    padding: 28px 28px 48px;
+  }
+
+  .grid-2-desktop {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bottom-nav {
+    max-width: 640px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .main-viewport {
+    padding-bottom: 110px;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-brand-title {
+    font-size: 1rem;
+  }
+
+  .nav-item {
+    padding: 6px 6px;
+    font-size: 0.68rem;
+  }
+}
